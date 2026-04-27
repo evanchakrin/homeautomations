@@ -20,7 +20,12 @@ export default async function WallPage() {
     .order("created_at", { ascending: true })
     .limit(1)
     .maybeSingle();
-  const household = (membership?.households as { id: string; name: string; timezone: string } | null) ?? null;
+  const housePicked = membership?.households as unknown as
+    | { id: string; name: string; timezone: string }
+    | { id: string; name: string; timezone: string }[]
+    | null
+    | undefined;
+  const household = Array.isArray(housePicked) ? housePicked[0] ?? null : housePicked ?? null;
   if (!household) redirect("/onboarding");
 
   const today = new Date();
