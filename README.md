@@ -1,6 +1,9 @@
 # Home Automations
 
-Local network home automation scripts. Currently supports Wiz smart LED lights.
+A small collection of home automation projects.
+
+- [`wiz/`](wiz/) — Local-network discovery and control for Wiz smart LED lights.
+- [`calendar/`](calendar/) — Family calendar web app (Next.js + Supabase, deploys to Vercel). A Skylight Calendar Plus-style replacement.
 
 ## Wiz Smart Lights
 
