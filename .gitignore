@@ -13,6 +13,9 @@ out/
 *.tsbuildinfo
 next-env.d.ts
 
+# screenshot artifacts
+calendar/previews/
+
 # Env
 .env
 .env.local
