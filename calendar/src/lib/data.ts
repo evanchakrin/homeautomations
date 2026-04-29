@@ -1,7 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import type {
   EventWithAssignees, FamilyMember, Chore, ChoreCompletion,
-  Meal, List, ListItem, Photo,
+  Meal, List, ListItem, Photo, LightDevice, AutomationScene, Note,
 } from "@/lib/supabase/types";
 
 export async function fetchMembers(householdId: string): Promise<FamilyMember[]> {
@@ -95,5 +95,36 @@ export async function fetchPhotos(householdId: string): Promise<Photo[]> {
     .select("*")
     .eq("household_id", householdId)
     .order("created_at", { ascending: false });
+  return data ?? [];
+}
+
+export async function fetchLightDevices(householdId: string): Promise<LightDevice[]> {
+  const supabase = createClient();
+  const { data } = await supabase
+    .from("light_devices")
+    .select("*")
+    .eq("household_id", householdId)
+    .order("position");
+  return data ?? [];
+}
+
+export async function fetchScenes(householdId: string): Promise<AutomationScene[]> {
+  const supabase = createClient();
+  const { data } = await supabase
+    .from("automation_scenes")
+    .select("*")
+    .eq("household_id", householdId)
+    .order("position");
+  return (data ?? []) as AutomationScene[];
+}
+
+export async function fetchNotes(householdId: string): Promise<Note[]> {
+  const supabase = createClient();
+  const { data } = await supabase
+    .from("notes")
+    .select("*")
+    .eq("household_id", householdId)
+    .order("pinned", { ascending: false })
+    .order("updated_at", { ascending: false });
   return data ?? [];
 }

@@ -8,15 +8,22 @@ tablet via the `/wall` kiosk view.
 ## Features
 
 - **Shared calendar** with month / week / day / schedule views
+- **Animated month carousel** — Jan–Dec strip with a sliding pill that animates as you navigate; grid swipes in from the right or left
 - **Per-member color coding** — events show whose they are at a glance
 - **Multi-assign events** — one event, multiple kids
 - **Recurrence** (daily, weekdays, weekly, monthly, yearly) via RRULE
 - **Chores** with per-day completion grid and points leaderboard
 - **Meal planner** — two-week rolling breakfast/lunch/dinner board
 - **Lists** — to-do, grocery, notes; multiple lists, hide-completed
+- **Notes** — family pinboard with sticky-note cards, color-coded by author, pin
+  to top; **synced live across devices** via Supabase Realtime
+- **Lights** — discover and control Wiz LEDs over UDP (per-device on/off,
+  brightness, scene, group control)
+- **Automations** — scene tiles (Wake Up / Movie Night / Bedtime / Away by
+  default + user-creatable) that run a sequence of light commands
 - **Photos** — uploaded to private Supabase Storage; slideshow on the wall display
 - **Wall display** (`/wall`) — kiosk view with clock, week strip, today's chores,
-  meal plan, lists, and a photo slideshow; auto-refreshes every 5 min
+  meal plan, lists, notes, and a photo slideshow; auto-refreshes every 5 min
 - **Multi-tenant** with row-level security per household
 
 ## Quick start
@@ -69,6 +76,42 @@ go through onboarding to name your family and add members.
    `NEXT_PUBLIC_SITE_URL`).
 4. Deploy. Update Supabase **Auth → URL Configuration** to include the Vercel
    URL.
+
+## Local + remote deployment (two instances, one Supabase)
+
+The recommended topology runs **two copies of this app**, both pointing at the
+same Supabase project:
+
+| Instance | Where | Lights/automations | Everything else |
+| --- | --- | --- | --- |
+| **Remote** | Vercel | disabled (Vercel can't reach your LAN) | full access |
+| **Local** | Mac mini, Pi, or NAS at home | **enabled** — actually drives the bulbs | full access |
+
+Because both instances share the same Postgres + Storage + Auth, all calendar
+data, chores, meals, lists, photos, **and notes** sync between them
+automatically. Notes use Supabase Realtime, so a note posted on the kitchen
+tablet appears on a phone within ~1 second.
+
+Set up:
+
+1. Deploy to Vercel as described above (no `LIGHTS_ENABLED`).
+2. On a machine at home, clone the repo, then:
+   ```bash
+   cd calendar
+   cp .env.example .env.local
+   # fill in the same Supabase URL + anon key as Vercel
+   echo "LIGHTS_ENABLED=1" >> .env.local
+   echo "WIZ_BROADCAST=192.168.39.255" >> .env.local   # your LAN broadcast addr
+   npm install && npm run build && npm start
+   ```
+3. Visit the local instance from a browser on the same network. Click
+   *Discover* on the **Lights** page to find Wiz devices over UDP. Click any
+   tile on **Automations** to run a scene.
+
+The remote (Vercel) instance shows a banner on the lights/automations pages
+explaining that control runs from the local instance — it can still **view**
+saved devices and scenes, and tapping a scene there records a "last run"
+timestamp without changing any bulbs.
 
 ## Wall display
 

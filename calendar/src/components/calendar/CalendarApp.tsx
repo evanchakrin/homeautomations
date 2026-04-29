@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import {
   format, addMonths, addWeeks, addDays, startOfMonth, startOfWeek, startOfDay,
 } from "date-fns";
@@ -12,6 +12,7 @@ import { DayView } from "./DayView";
 import { ScheduleView } from "./ScheduleView";
 import { EventDialog } from "./EventDialog";
 import { MemberFilter } from "./MemberFilter";
+import { MonthCarousel } from "./MonthCarousel";
 
 type View = "month" | "week" | "day" | "schedule";
 
@@ -26,6 +27,14 @@ export function CalendarApp({
   const [anchor, setAnchor] = useState<Date>(new Date());
   const [activeMembers, setActiveMembers] = useState<string[]>(members.map((m) => m.id));
   const [editing, setEditing] = useState<{ event?: EventWithAssignees; defaultDate?: Date } | null>(null);
+  const [direction, setDirection] = useState<"left" | "right">("right");
+  const prevAnchorRef = useRef<Date>(anchor);
+
+  function setAnchorWithDirection(next: Date) {
+    setDirection(next > prevAnchorRef.current ? "right" : "left");
+    prevAnchorRef.current = next;
+    setAnchor(next);
+  }
 
   const range = useMemo(() => {
     if (view === "month") {
@@ -54,10 +63,11 @@ export function CalendarApp({
   }, [events, activeMembers, range]);
 
   function shift(delta: number) {
-    if (view === "month") setAnchor((d) => addMonths(d, delta));
-    else if (view === "week") setAnchor((d) => addWeeks(d, delta));
-    else if (view === "day") setAnchor((d) => addDays(d, delta));
-    else setAnchor((d) => addDays(d, delta * 7));
+    setDirection(delta > 0 ? "right" : "left");
+    if (view === "month") setAnchor((d) => { const n = addMonths(d, delta); prevAnchorRef.current = n; return n; });
+    else if (view === "week") setAnchor((d) => { const n = addWeeks(d, delta); prevAnchorRef.current = n; return n; });
+    else if (view === "day") setAnchor((d) => { const n = addDays(d, delta); prevAnchorRef.current = n; return n; });
+    else setAnchor((d) => { const n = addDays(d, delta * 7); prevAnchorRef.current = n; return n; });
   }
 
   const heading = useMemo(() => {
@@ -76,7 +86,10 @@ export function CalendarApp({
       <div className="flex flex-wrap items-center gap-3">
         <div className="flex items-center gap-1">
           <button onClick={() => shift(-1)} className="btn btn-ghost px-3">‹</button>
-          <button onClick={() => setAnchor(new Date())} className="btn btn-ghost text-sm">Today</button>
+          <button
+            onClick={() => setAnchorWithDirection(new Date())}
+            className="btn btn-ghost text-sm"
+          >Today</button>
           <button onClick={() => shift(1)} className="btn btn-ghost px-3">›</button>
         </div>
         <h1 className="font-display text-3xl">{heading}</h1>
@@ -86,11 +99,21 @@ export function CalendarApp({
         </div>
       </div>
 
+      {view === "month" && (
+        <MonthCarousel
+          monthIndex={anchor.getMonth()}
+          year={anchor.getFullYear()}
+          onMonthChange={(m, y) => setAnchorWithDirection(new Date(y, m, 1))}
+          onYearChange={(y) => setAnchorWithDirection(new Date(y, anchor.getMonth(), 1))}
+        />
+      )}
+
       <MemberFilter members={members} active={activeMembers} onChange={setActiveMembers} />
 
       {view === "month" && (
         <MonthView
           anchor={anchor}
+          direction={direction}
           events={visibleEvents}
           members={members}
           onSelectDate={(d) => setEditing({ defaultDate: d })}

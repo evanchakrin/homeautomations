@@ -12,7 +12,10 @@ const SHOTS = [
   { name: "05-lists",            path: "/demo?view=lists",                       width: 1600, height: 900 },
   { name: "06-settings",         path: "/demo?view=settings",                    width: 1600, height: 1100 },
   { name: "07-wall-display",     path: "/demo?view=wall",                        width: 1600, height: 1200 },
-  { name: "08-onboarding",       path: "/onboarding",                            width: 1400, height: 900 },
+  { name: "08-notes",            path: "/demo?view=notes",                       width: 1600, height: 1100 },
+  { name: "09-lights",           path: "/demo?view=lights",                      width: 1600, height: 1100 },
+  { name: "10-automations",      path: "/demo?view=automations",                 width: 1600, height: 1100 },
+  { name: "11-onboarding",       path: "/onboarding",                            width: 1400, height: 900 },
 ];
 
 await mkdir(OUT, { recursive: true });

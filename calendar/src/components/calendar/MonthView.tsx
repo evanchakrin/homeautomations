@@ -7,19 +7,27 @@ import { monthGrid } from "@/lib/dates";
 import { EventChip } from "./EventChip";
 
 export function MonthView({
-  anchor, events, members, onSelectDate, onSelectEvent,
+  anchor, events, members, direction, onSelectDate, onSelectEvent,
 }: {
   anchor: Date;
   events: EventOccurrence[];
   members: FamilyMember[];
+  direction?: "left" | "right";
   onSelectDate: (d: Date) => void;
   onSelectEvent: (e: EventOccurrence) => void;
 }) {
   const days = monthGrid(anchor);
   const memberById = new Map(members.map((m) => [m.id, m]));
 
+  const animClass =
+    direction === "right" ? "animate-month-in-right" :
+    direction === "left"  ? "animate-month-in-left"  : "";
+
   return (
-    <div className="card overflow-hidden">
+    <div
+      key={`${anchor.getFullYear()}-${anchor.getMonth()}`}
+      className={`card overflow-hidden ${animClass}`}
+    >
       <div className="grid grid-cols-7 text-xs uppercase tracking-wide text-ink/50 border-b border-black/5">
         {["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].map((d) => (
           <div key={d} className="p-2 text-center">{d}</div>

@@ -90,3 +90,43 @@ export type Photo = {
   caption: string | null;
   created_at: string;
 };
+
+export type LightDevice = {
+  id: string;
+  household_id: string;
+  ip: string;
+  mac: string | null;
+  name: string;
+  room: string | null;
+  last_seen: string | null;
+  position: number;
+};
+
+export type SceneAction =
+  | { type: "lights.scene"; target: "all" | string; scene: string; dimming?: number }
+  | { type: "lights.brightness"; target: "all" | string; dimming: number }
+  | { type: "lights.on"; target: "all" | string }
+  | { type: "lights.off"; target: "all" | string }
+  | { type: "lights.temp"; target: "all" | string; temp: number; dimming?: number };
+
+export type AutomationScene = {
+  id: string;
+  household_id: string;
+  name: string;
+  emoji: string | null;
+  description: string | null;
+  actions: SceneAction[];
+  position: number;
+  last_run_at: string | null;
+};
+
+export type Note = {
+  id: string;
+  household_id: string;
+  author_member_id: string | null;
+  body: string;
+  color: string | null;
+  pinned: boolean;
+  created_at: string;
+  updated_at: string;
+};

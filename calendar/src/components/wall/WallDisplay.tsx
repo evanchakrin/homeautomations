@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { format, isSameDay } from "date-fns";
 import type {
-  EventWithAssignees, FamilyMember, Chore, ChoreCompletion, Meal, List, ListItem, Photo,
+  EventWithAssignees, FamilyMember, Chore, ChoreCompletion, Meal, List, ListItem, Photo, Note,
 } from "@/lib/supabase/types";
 import { expandEvents } from "@/lib/recurrence";
 import { isChoreDueOn } from "@/lib/chores";
@@ -13,7 +13,7 @@ import { hexToRgba } from "@/lib/colors";
 type PhotoSigned = Photo & { signedUrl: string | null };
 
 export function WallDisplay({
-  household, members, events, chores, completions, meals, lists, listItems, photos,
+  household, members, events, chores, completions, meals, lists, listItems, photos, notes = [],
 }: {
   household: { id: string; name: string; timezone: string };
   members: FamilyMember[];
@@ -24,6 +24,7 @@ export function WallDisplay({
   lists: List[];
   listItems: Record<string, ListItem[]>;
   photos: PhotoSigned[];
+  notes?: Note[];
 }) {
   const [now, setNow] = useState(new Date());
   useEffect(() => {
@@ -163,6 +164,37 @@ export function WallDisplay({
             })}
           </div>
         </section>
+
+        {/* notes */}
+        {notes.length > 0 && (
+          <section className="card p-5 col-span-12">
+            <div className="flex items-center justify-between mb-3">
+              <h2 className="font-display text-2xl">Notes</h2>
+              <span className="text-ink/40 text-sm">{notes.length} on the board</span>
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+              {[...notes]
+                .sort((a, b) => Number(b.pinned) - Number(a.pinned))
+                .slice(0, 8)
+                .map((n) => {
+                  const author = n.author_member_id ? memberById.get(n.author_member_id) : null;
+                  const color = n.color ?? author?.color ?? "#3D5A80";
+                  return (
+                    <div
+                      key={n.id}
+                      className="rounded-xl p-3 border-l-4"
+                      style={{ background: `${color}1f`, borderColor: color }}
+                    >
+                      <div className="text-[10px] uppercase tracking-wide text-ink/50 mb-1">
+                        {author?.name ?? "Anon"}{n.pinned ? " · pinned" : ""}
+                      </div>
+                      <div className="text-sm whitespace-pre-wrap line-clamp-4">{n.body}</div>
+                    </div>
+                  );
+                })}
+            </div>
+          </section>
+        )}
 
         {/* photo slideshow */}
         {photos.length > 0 && (

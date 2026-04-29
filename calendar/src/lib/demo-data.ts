@@ -1,5 +1,6 @@
 import type {
   EventWithAssignees, FamilyMember, Chore, ChoreCompletion, Meal, List, ListItem, Photo,
+  LightDevice, AutomationScene, Note,
 } from "@/lib/supabase/types";
 import { isoDate, plusDays } from "@/lib/dates";
 
@@ -125,3 +126,59 @@ export const DEMO_LIST_ITEMS: Record<string, ListItem[]> = {
 };
 
 export const DEMO_PHOTOS: (Photo & { signedUrl: string | null })[] = [];
+
+export const DEMO_DEVICES: LightDevice[] = [
+  { id: "d1", household_id: "demo", ip: "192.168.39.10", mac: "a8:bb:50:11:22:33", name: "Living room lamp",  room: "Living Room", last_seen: at(0, 12).toISOString(), position: 0 },
+  { id: "d2", household_id: "demo", ip: "192.168.39.11", mac: "a8:bb:50:11:22:34", name: "Floor lamp",        room: "Living Room", last_seen: at(0, 12).toISOString(), position: 1 },
+  { id: "d3", household_id: "demo", ip: "192.168.39.12", mac: "a8:bb:50:11:22:35", name: "Kitchen overhead",  room: "Kitchen",     last_seen: at(0, 12).toISOString(), position: 2 },
+  { id: "d4", household_id: "demo", ip: "192.168.39.13", mac: "a8:bb:50:11:22:36", name: "Bedside",           room: "Bedroom",     last_seen: at(0, 12).toISOString(), position: 3 },
+  { id: "d5", household_id: "demo", ip: "192.168.39.14", mac: "a8:bb:50:11:22:37", name: "Hallway",           room: "Hallway",     last_seen: at(0, 12).toISOString(), position: 4 },
+];
+
+export const DEMO_SCENES: AutomationScene[] = [
+  { id: "s1", household_id: "demo", name: "Wake Up",     emoji: "☀️", description: "All lights, daylight at 80%",
+    actions: [{ type: "lights.scene", target: "all", scene: "daylight", dimming: 80 }],
+    position: 0, last_run_at: at(0, 6, 30).toISOString() },
+  { id: "s2", household_id: "demo", name: "Movie Night", emoji: "🎬", description: "Cozy at 25%",
+    actions: [{ type: "lights.scene", target: "all", scene: "cozy", dimming: 25 }],
+    position: 1, last_run_at: at(-1, 20).toISOString() },
+  { id: "s3", household_id: "demo", name: "Bedtime",     emoji: "🌙", description: "Bedtime scene, very dim",
+    actions: [{ type: "lights.scene", target: "all", scene: "bedtime", dimming: 15 }],
+    position: 2, last_run_at: at(-1, 22, 30).toISOString() },
+  { id: "s4", household_id: "demo", name: "Away",        emoji: "🚪", description: "All off",
+    actions: [{ type: "lights.off", target: "all" }],
+    position: 3, last_run_at: null },
+  { id: "s5", household_id: "demo", name: "Reading",     emoji: "📖", description: "Living room warm white at 60%",
+    actions: [{ type: "lights.scene", target: "device:d1", scene: "warm_white", dimming: 60 }, { type: "lights.off", target: "device:d2" }],
+    position: 4, last_run_at: null },
+  { id: "s6", household_id: "demo", name: "Dinner",      emoji: "🍽️", description: "Kitchen + living room candlelight",
+    actions: [{ type: "lights.scene", target: "device:d3", scene: "candlelight" }, { type: "lights.scene", target: "device:d1", scene: "cozy", dimming: 40 }],
+    position: 5, last_run_at: null },
+];
+
+export const DEMO_NOTES: Note[] = [
+  { id: "n1", household_id: "demo", author_member_id: "m2", color: "#E07A5F",
+    body: "Soccer cleats need replacing — Theo's outgrew them again.",
+    pinned: true,
+    created_at: at(-1, 9).toISOString(), updated_at: at(-1, 9).toISOString() },
+  { id: "n2", household_id: "demo", author_member_id: "m1", color: "#3D5A80",
+    body: "Reminder: trash goes out Tuesday night.",
+    pinned: true,
+    created_at: at(-2, 18).toISOString(), updated_at: at(-2, 18).toISOString() },
+  { id: "n3", household_id: "demo", author_member_id: "m3", color: "#81B29A",
+    body: "Field trip permission slip is on the counter — please sign.",
+    pinned: false,
+    created_at: at(0, 7, 30).toISOString(), updated_at: at(0, 7, 30).toISOString() },
+  { id: "n4", household_id: "demo", author_member_id: "m4", color: "#F2CC8F",
+    body: "I drew a picture of the cat. it's on the fridge",
+    pinned: false,
+    created_at: at(-1, 16).toISOString(), updated_at: at(-1, 16).toISOString() },
+  { id: "n5", household_id: "demo", author_member_id: "m1", color: "#3D5A80",
+    body: "Booked the cabin for the long weekend. Confirmation in email.",
+    pinned: false,
+    created_at: at(-3, 11).toISOString(), updated_at: at(-3, 11).toISOString() },
+  { id: "n6", household_id: "demo", author_member_id: "m2", color: "#E07A5F",
+    body: "Date night Saturday — kids w/ Grandma, dinner reservation 7:30.",
+    pinned: false,
+    created_at: at(-2, 8).toISOString(), updated_at: at(-2, 8).toISOString() },
+];

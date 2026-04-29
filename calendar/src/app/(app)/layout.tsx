@@ -3,12 +3,15 @@ import { requireHousehold } from "@/lib/auth";
 import { LogoutButton } from "@/components/LogoutButton";
 
 const NAV = [
-  { href: "/calendar", label: "Calendar" },
-  { href: "/chores", label: "Chores" },
-  { href: "/meals", label: "Meals" },
-  { href: "/lists", label: "Lists" },
-  { href: "/photos", label: "Photos" },
-  { href: "/settings", label: "Settings" },
+  { href: "/calendar",    label: "Calendar" },
+  { href: "/chores",      label: "Chores" },
+  { href: "/meals",       label: "Meals" },
+  { href: "/lists",       label: "Lists" },
+  { href: "/notes",       label: "Notes" },
+  { href: "/photos",      label: "Photos" },
+  { href: "/lights",      label: "Lights" },
+  { href: "/automations", label: "Automations" },
+  { href: "/settings",    label: "Settings" },
 ];
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {

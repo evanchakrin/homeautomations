@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import {
   fetchEvents, fetchMembers, fetchChores, fetchChoreCompletions,
-  fetchMeals, fetchLists, fetchListItems, fetchPhotos,
+  fetchMeals, fetchLists, fetchListItems, fetchPhotos, fetchNotes,
 } from "@/lib/data";
 import { isoDate, plusDays } from "@/lib/dates";
 import { WallDisplay } from "@/components/wall/WallDisplay";
@@ -34,7 +34,7 @@ export default async function WallPage() {
   const fromIso = isoDate(today);
   const toIso = isoDate(plusDays(today, 6));
 
-  const [members, events, chores, completions, meals, lists, photos] = await Promise.all([
+  const [members, events, chores, completions, meals, lists, photos, notes] = await Promise.all([
     fetchMembers(household.id),
     fetchEvents(household.id, rangeStart, rangeEnd),
     fetchChores(household.id),
@@ -42,6 +42,7 @@ export default async function WallPage() {
     fetchMeals(household.id, fromIso, toIso),
     fetchLists(household.id),
     fetchPhotos(household.id),
+    fetchNotes(household.id),
   ]);
 
   const listItemsArrays = await Promise.all(lists.map((l) => fetchListItems(l.id)));
@@ -66,6 +67,7 @@ export default async function WallPage() {
       lists={lists}
       listItems={listItems}
       photos={signedPhotos}
+      notes={notes}
     />
   );
 }
