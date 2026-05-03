@@ -36,10 +36,12 @@ tablet via the `/wall` kiosk view.
 3. In *Authentication → URL Configuration*, set the **Site URL** to your
    Vercel domain (or `http://localhost:3000` for local) and add it to the
    redirect allow list.
-4. Open the **SQL Editor** and paste in
-   [`supabase/migrations/0001_init.sql`](supabase/migrations/0001_init.sql).
-   Click **Run**. This creates all tables, RLS policies, the `photos` storage
-   bucket, and the `families` triggers.
+4. Open the **SQL Editor** and run each migration in order:
+   - [`supabase/migrations/0001_init.sql`](supabase/migrations/0001_init.sql) —
+     core tables (households, members, events, chores, meals, lists, photos),
+     RLS policies, storage bucket, and triggers.
+   - [`supabase/migrations/0002_lights_automations_notes.sql`](supabase/migrations/0002_lights_automations_notes.sql) —
+     `light_devices`, `automation_scenes`, and `notes` tables.
 
 ### 2. Configure environment
 
@@ -140,13 +142,17 @@ calendar/
 ├── src/
 │   ├── app/
 │   │   ├── (app)/         # authenticated app shell + pages
+│   │   │   ├── automations/
 │   │   │   ├── calendar/
 │   │   │   ├── chores/
-│   │   │   ├── meals/
+│   │   │   ├── lights/
 │   │   │   ├── lists/
+│   │   │   ├── meals/
+│   │   │   ├── notes/
 │   │   │   ├── photos/
 │   │   │   └── settings/
 │   │   ├── auth/callback/ # Supabase magic link callback
+│   │   ├── demo/          # no-login demo with static fixture data
 │   │   ├── login/
 │   │   ├── onboarding/
 │   │   └── wall/          # public-after-login kiosk view
@@ -154,14 +160,18 @@ calendar/
 │   ├── lib/
 │   │   ├── supabase/      # browser/server/middleware Supabase clients
 │   │   ├── auth.ts        # requireUser / requireHousehold helpers
+│   │   ├── chores.ts      # chore-due-on-day rules
+│   │   ├── colors.ts      # color palette + hex helpers
 │   │   ├── data.ts        # server-side data fetchers
 │   │   ├── dates.ts       # date helpers
+│   │   ├── demo-data.ts   # static fixture data for /demo
 │   │   ├── recurrence.ts  # RRULE expansion
-│   │   ├── colors.ts      # color palette + hex helpers
-│   │   └── chores.ts      # chore-due-on-day rules
+│   │   └── wiz.ts         # WIZ_SCENES map + UDP helpers
 │   └── middleware.ts      # session refresh + route gating
 └── supabase/
-    └── migrations/0001_init.sql
+    └── migrations/
+        ├── 0001_init.sql
+        └── 0002_lights_automations_notes.sql
 ```
 
 ## Stack
