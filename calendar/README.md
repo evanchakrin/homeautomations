@@ -22,8 +22,9 @@ tablet via the `/wall` kiosk view.
 - **Automations** — scene tiles (Wake Up / Movie Night / Bedtime / Away by
   default + user-creatable) that run a sequence of light commands
 - **Photos** — uploaded to private Supabase Storage; slideshow on the wall display
-- **Wall display** (`/wall`) — kiosk view with clock, week strip, today's chores,
-  meal plan, lists, notes, and a photo slideshow; auto-refreshes every 5 min
+- **Wall display** (`/wall`) — kiosk view with clock, a rolling 7-day calendar,
+  today's chores, meal plan, lists, notes, and a photo slideshow; auto-refreshes
+  every 5 min
 - **Multi-tenant** with row-level security per household
 
 ## Quick start
@@ -116,7 +117,8 @@ timestamp without changing any bulbs.
 ## Wall display
 
 Navigate to `/wall` after signing in. Put it in fullscreen on a tablet. The
-page auto-refreshes data every five minutes; the photo slideshow rotates
+first screen is a scrolling 7-day calendar that always starts with today, and
+the page auto-refreshes data every five minutes; the photo slideshow rotates
 every twelve seconds. To prevent the tablet from logging out, use a long-lived
 browser session — Supabase magic-link sessions persist across reloads.
 
