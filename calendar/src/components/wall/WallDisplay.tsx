@@ -185,6 +185,10 @@ function RollingWeekCalendar({
   now: Date;
 }) {
   const scrollerRef = useRef<HTMLDivElement>(null);
+  const visibleEvents = useMemo(
+    () => events.filter((e) => e.all_day || days.some((d) => isSameDay(e.occurrence_start, d))),
+    [days, events],
+  );
 
   useEffect(() => {
     const scroller = scrollerRef.current;
@@ -199,7 +203,7 @@ function RollingWeekCalendar({
       <div className="flex items-center justify-between border-b border-black/5 px-5 py-4">
         <div>
           <h2 className="font-display text-3xl">Next 7 days</h2>
-          <p className="text-sm text-ink/50">Rolling week view for wall mode</p>
+          <p className="text-sm text-ink/50">Scrollable time grid that auto-centers on the current time</p>
         </div>
         <div className="text-right text-sm text-ink/50">
           <div>{format(days[0], "LLL d")} – {format(days[days.length - 1], "LLL d")}</div>
@@ -221,7 +225,7 @@ function RollingWeekCalendar({
           </div>
           <TimeGrid
             days={days}
-            events={events.filter((e) => e.all_day || days.some((d) => isSameDay(e.occurrence_start, d)))}
+            events={visibleEvents}
             members={members}
             onSelectSlot={() => undefined}
             onSelectEvent={() => undefined}
