@@ -51,6 +51,8 @@ turn_off(ips)
 | night_light | 29 | Ultra dim |
 | candlelight | 30 | Flickering warm |
 | golden_white | 31 | Rich warm |
+| pulse | 32 | Pulsing effect |
+| steampunk | 33 | Steampunk ambience |
 
 ### Network Config
 
