@@ -40,14 +40,15 @@ export function WallDisplay({
     return () => clearInterval(t);
   }, []);
 
-  const days = useMemo(() => Array.from({ length: 7 }, (_, i) => plusDays(now, i)), [now]);
+  const today = useMemo(() => startOfDay(now), [isoDate(now)]);
+  const days = useMemo(() => Array.from({ length: 7 }, (_, i) => plusDays(today, i)), [today]);
   const expanded = useMemo(
-    () => expandEvents(events, plusDays(now, -1), plusDays(now, 8)),
-    [events, now],
+    () => expandEvents(events, plusDays(today, -1), plusDays(today, 8)),
+    [events, today],
   );
   const memberById = new Map(members.map((m) => [m.id, m]));
   const completedSet = new Set(completions.map((c) => `${c.chore_id}:${c.completed_on}`));
-  const todayChores = chores.filter((c) => isChoreDueOn(c, now));
+  const todayChores = chores.filter((c) => isChoreDueOn(c, today));
 
   return (
     <div className="min-h-screen w-full bg-paper text-ink">
@@ -205,7 +206,7 @@ function RollingWeekCalendar({
   }, [now]);
 
   return (
-    <section className="card flex-1 min-h-0 overflow-hidden" aria-labelledby="rolling-week-calendar-heading">
+    <section className="card flex-1 min-h-0 overflow-hidden">
       <div className="flex items-center justify-between border-b border-black/5 px-5 py-4">
         <div>
           <h2 id="rolling-week-calendar-heading" className="font-display text-3xl">Next 7 days</h2>
