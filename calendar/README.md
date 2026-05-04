@@ -8,10 +8,17 @@ tablet via the `/wall` kiosk view.
 ## Features
 
 - **Shared calendar** with month / week / day / schedule views
-- **Animated month carousel** — Jan–Dec strip with a sliding pill that animates as you navigate; grid swipes in from the right or left
+  - **Month view** — 6-week grid; up to 4 events per cell with a "+N more" overflow label; grid slides in from left or right as you navigate
+  - **Week / Day views** — 24-hour time grid with pixel-accurate event positioning; dedicated all-day row above the grid; click any hour slot to create an event pre-filled for that time
+  - **Schedule view** — 30-day lookahead grouped by day
+  - **Month view** click-to-create — click any date cell to open the new-event dialog pre-filled for that date
+- **Animated month carousel** — Jan–Dec strip with a sliding pill that animates as you navigate; year step buttons on either side
+- **Today indicator** — today's date shown with a filled circle in month view and accent color in week/day views
+- **Member filter strip** — toggle individual family members to show/hide their events across all views
 - **Per-member color coding** — events show whose they are at a glance
-- **Multi-assign events** — one event, multiple kids
+- **Multi-assign events** — one event, multiple family members
 - **Recurrence** (daily, weekdays, weekly, monthly, yearly) via RRULE
+- **Full event editor** — title, start/end date+time, all-day toggle, recurrence, location, notes, member assignment; create, edit, and delete from the same dialog
 - **Chores** with per-day completion grid and points leaderboard
 - **Meal planner** — two-week rolling breakfast/lunch/dinner board
 - **Lists** — to-do, grocery, notes; multiple lists, hide-completed
