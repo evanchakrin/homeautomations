@@ -121,7 +121,8 @@ timestamp without changing any bulbs.
 ## Wall display
 
 Navigate to `/wall` after signing in. Put it in fullscreen on a tablet. The
-page auto-refreshes data every five minutes; the photo slideshow rotates
+first screen is a scrolling 7-day calendar that always starts with today, and
+the page auto-refreshes data every five minutes; the photo slideshow rotates
 every twelve seconds. To prevent the tablet from logging out, use a long-lived
 browser session — Supabase magic-link sessions persist across reloads.
 

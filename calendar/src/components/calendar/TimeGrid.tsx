@@ -5,7 +5,7 @@ import type { EventOccurrence } from "@/lib/recurrence";
 import type { FamilyMember } from "@/lib/supabase/types";
 import { hexToRgba } from "@/lib/colors";
 
-const HOUR_HEIGHT = 56;
+export const HOUR_HEIGHT = 56;
 const HOURS = Array.from({ length: 24 }, (_, i) => i);
 
 export function TimeGrid({
