@@ -7,7 +7,7 @@ import type {
 } from "@/lib/supabase/types";
 import { expandEvents } from "@/lib/recurrence";
 import { isChoreDueOn } from "@/lib/chores";
-import { isoDate, plusDays } from "@/lib/dates";
+import { fromIsoDate, isoDate, plusDays } from "@/lib/dates";
 import { hexToRgba } from "@/lib/colors";
 import { HOUR_HEIGHT, TimeGrid } from "@/components/calendar/TimeGrid";
 
@@ -40,7 +40,8 @@ export function WallDisplay({
     return () => clearInterval(t);
   }, []);
 
-  const today = useMemo(() => startOfDay(now), [isoDate(now)]);
+  const todayKey = isoDate(now);
+  const today = useMemo(() => fromIsoDate(todayKey), [todayKey]);
   const days = useMemo(() => Array.from({ length: 7 }, (_, i) => plusDays(today, i)), [today]);
   const expanded = useMemo(
     () => expandEvents(events, plusDays(today, -1), plusDays(today, 8)),
