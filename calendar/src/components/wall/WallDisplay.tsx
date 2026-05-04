@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { differenceInMinutes, format, isSameDay, isToday, startOfDay } from "date-fns";
+import { differenceInMinutes, endOfDay, format, isToday, startOfDay } from "date-fns";
 import type {
   EventWithAssignees, FamilyMember, Chore, ChoreCompletion, Meal, List, ListItem, Photo, Note,
 } from "@/lib/supabase/types";
@@ -12,6 +12,8 @@ import { hexToRgba } from "@/lib/colors";
 import { HOUR_HEIGHT, TimeGrid } from "@/components/calendar/TimeGrid";
 
 type PhotoSigned = Photo & { signedUrl: string | null };
+const MIN_DAY_COLUMN_WIDTH = 150;
+const MIN_CALENDAR_WIDTH = 60 + (MIN_DAY_COLUMN_WIDTH * 7);
 
 export function WallDisplay({
   household, members, events, chores, completions, meals, lists, listItems, photos, notes = [],
@@ -186,7 +188,11 @@ function RollingWeekCalendar({
 }) {
   const scrollerRef = useRef<HTMLDivElement>(null);
   const visibleEvents = useMemo(
-    () => events.filter((e) => e.all_day || days.some((d) => isSameDay(e.occurrence_start, d))),
+    () => {
+      const rangeStart = startOfDay(days[0]);
+      const rangeEnd = endOfDay(days[days.length - 1]);
+      return events.filter((e) => e.occurrence_start <= rangeEnd && e.occurrence_end >= rangeStart);
+    },
     [days, events],
   );
 
@@ -217,7 +223,7 @@ function RollingWeekCalendar({
         role="region"
         aria-labelledby="rolling-week-calendar-heading"
       >
-        <div className="min-w-[1120px]">
+        <div style={{ minWidth: `${MIN_CALENDAR_WIDTH}px` }}>
           <div className="grid sticky top-0 z-10 bg-paper/95 backdrop-blur-sm" style={{ gridTemplateColumns: "60px repeat(7, 1fr)" }}>
             <div />
             {days.map((d) => (
