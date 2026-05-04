@@ -199,10 +199,10 @@ function RollingWeekCalendar({
   }, [now]);
 
   return (
-    <section className="card flex-1 min-h-0 overflow-hidden">
+    <section className="card flex-1 min-h-0 overflow-hidden" aria-labelledby="rolling-week-calendar-heading">
       <div className="flex items-center justify-between border-b border-black/5 px-5 py-4">
         <div>
-          <h2 className="font-display text-3xl">Next 7 days</h2>
+          <h2 id="rolling-week-calendar-heading" className="font-display text-3xl">Next 7 days</h2>
           <p className="text-sm text-ink/50">Scrollable time grid that auto-centers on the current time</p>
         </div>
         <div className="text-right text-sm text-ink/50">
@@ -211,7 +211,12 @@ function RollingWeekCalendar({
         </div>
       </div>
 
-      <div ref={scrollerRef} className="h-full overflow-auto">
+      <div
+        ref={scrollerRef}
+        className="h-full overflow-auto"
+        role="region"
+        aria-labelledby="rolling-week-calendar-heading"
+      >
         <div className="min-w-[1120px]">
           <div className="grid sticky top-0 z-10 bg-paper/95 backdrop-blur-sm" style={{ gridTemplateColumns: "60px repeat(7, 1fr)" }}>
             <div />
